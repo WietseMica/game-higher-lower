@@ -1,5 +1,5 @@
 <template>
-    <div class="card col-4">
+    <div class="card">
         <div class="card-body text-center">
             <form>
                 <h4>
@@ -13,12 +13,9 @@
                 <input class="form-control mb-3" :name="playerKey" v-model="playerGuessNumber">
                 <span class="btn btn-primary" v-on:click="guessNumber">Guess Number</span>
 
-                <div class="alert alert-danger mt-2" v-if="guessResultValue != null">
+                <div class="alert alert-danger mt-2" v-if="guessResultValue != null && guessResultValue !== 3">
                     <span v-if="guessResultValue === 1">HIGHER</span>
                     <span v-if="guessResultValue === 2">LOWER</span>
-                </div>
-                <div class="alert alert-success mt-2" v-if="guessResultValue != null">
-                    <span v-if="guessResultValue === 3"><strong>YOU WIN!!!!!!!!!</strong></span>
                 </div>
 
             </form>
@@ -33,15 +30,10 @@ import axios from "axios";
 export default {
     props: ['game', 'name', 'playerKey'],
     name: "Player",
-    components: {
-
-    },
     methods: {
         savePlayerName(playerKey) {
             this.inputPlayerNameisHidden = true;
-
             this.savePlayer(playerKey);
-
         },
         async savePlayer() {
             await axios.post('http://localhost/api/set-player-names', {
@@ -55,8 +47,6 @@ export default {
                 });
         },
         async guessNumber() {
-            this.$bvModal.show("exampleModal")
-
             await axios.post('http://localhost/api/guess-number', {
                 number: this.playerGuessNumber
             })
@@ -68,13 +58,15 @@ export default {
                 });
         },
         guessResult(result) {
-            alert(result)
-            this.guessResultValue = null;
+
             this.guessResultValue = result;
+
+            if (this.guessResultValue === 3) {
+                this.$emit('openWinnerModal', true);
+            } else {
+                this.$emit('openWinnerModal', false);
+            }
         },
-        openModal() {
-            this.showModal = true;
-        }
     },
     data() {
         return {

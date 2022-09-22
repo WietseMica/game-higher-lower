@@ -59,11 +59,11 @@ class GameController extends Controller
         $validated = $request->validated();
         $returnValue = null;
 
-        if ($validated['number'] === Session::get('game.randomNumber')) {
+        if ((int)$validated['number'] === Session::get('game.randomNumber')) {
             $returnValue = 3; //Winner
-        } elseif ($validated['number'] > Session::get('game.randomNumber')) {
+        } elseif ((int)$validated['number'] > Session::get('game.randomNumber')) {
             $returnValue = 2; //Lower
-        } elseif ($validated['number'] < Session::get('game.randomNumber')) {
+        } elseif ((int)$validated['number'] < Session::get('game.randomNumber')) {
             $returnValue = 1; //Higher
         }
 

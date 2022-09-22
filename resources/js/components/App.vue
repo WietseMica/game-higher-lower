@@ -8,7 +8,7 @@
 
             <div class="col-12 button-bar">
 
-                <button class="btn btn-primary float-end mb-3">Start New Game</button>
+                <span class="btn btn-primary float-end mb-3" v-on:click="startNewGame()">Start New Game</span>
             </div>
 
             <div class="mt-5">
@@ -26,6 +26,12 @@ export default {
     name: "App",
     components: {
         Players
+    },
+    methods: {
+        startNewGame() {
+            //Maybe not the best solution
+            window.location.reload();
+        }
     },
     data() {
         return {
